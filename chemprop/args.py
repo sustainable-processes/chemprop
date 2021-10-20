@@ -322,6 +322,8 @@ class TrainArgs(CommonArgs):
     """Hidden dim for higher-capacity FFN (defaults to hidden_size)."""
     ffn_num_layers: int = 2
     """Number of layers in FFN after MPN encoding."""
+    molecule_weights_path: str = None
+    """Path to file with molecule weights. Only relevant if :code:`number_of_molecules > 1"""
     features_only: bool = False
     """Use only the additional features in an FFN, no graph network."""
     separate_val_features_path: List[str] = None

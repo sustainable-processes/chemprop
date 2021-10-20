@@ -45,8 +45,8 @@ def train(model: MoleculeModel,
     for batch in tqdm(data_loader, total=len(data_loader), leave=False):
         # Prepare batch
         batch: MoleculeDataset
-        mol_batch, features_batch, target_batch, atom_descriptors_batch, atom_features_batch, bond_features_batch, data_weights_batch = \
-            batch.batch_graph(), batch.features(), batch.targets(), batch.atom_descriptors(), \
+        mol_batch, features_batch, target_batch, molecule_weights_batch, atom_descriptors_batch, atom_features_batch, bond_features_batch, data_weights_batch = \
+            batch.batch_graph(), batch.features(), batch.targets(), batch.molecule_weights(), batch.atom_descriptors(), \
             batch.atom_features(), batch.bond_features(), batch.data_weights()
 
         mask = torch.tensor([[x is not None for x in tb] for tb in target_batch], dtype=torch.bool)
@@ -60,7 +60,7 @@ def train(model: MoleculeModel,
 
         # Run model
         model.zero_grad()
-        preds = model(mol_batch, features_batch, atom_descriptors_batch, atom_features_batch, bond_features_batch)
+        preds = model(mol_batch, features_batch, molecule_weights_batch, atom_descriptors_batch, atom_features_batch, bond_features_batch)
 
         # Move tensors to correct device
         torch_device = preds.device

@@ -152,6 +152,7 @@ class MoleculeModel(nn.Module):
     def forward(self,
                 batch: Union[List[List[str]], List[List[Chem.Mol]], List[List[Tuple[Chem.Mol, Chem.Mol]]], List[BatchMolGraph]],
                 features_batch: List[np.ndarray] = None,
+                molecule_weights_batch: List[np.ndarray] = None,
                 atom_descriptors_batch: List[np.ndarray] = None,
                 atom_features_batch: List[np.ndarray] = None,
                 bond_features_batch: List[np.ndarray] = None) -> torch.FloatTensor:
@@ -169,7 +170,7 @@ class MoleculeModel(nn.Module):
         :return: The output of the :class:`MoleculeModel`, containing a list of property predictions
         """
 
-        output = self.ffn(self.encoder(batch, features_batch, atom_descriptors_batch,
+        output = self.ffn(self.encoder(batch, features_batch, molecule_weights_batch, atom_descriptors_batch,
                                        atom_features_batch, bond_features_batch))
 
         # Don't apply sigmoid during training b/c using BCEWithLogitsLoss

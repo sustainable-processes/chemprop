@@ -176,6 +176,7 @@ def get_data(path: str,
              args: Union[TrainArgs, PredictArgs] = None,
              data_weights_path: str = None,
              features_path: List[str] = None,
+             molecule_weights_path: str = None,
              features_generator: List[str] = None,
              phase_features_path: str = None,
              atom_descriptors_path: str = None,
@@ -240,6 +241,11 @@ def get_data(path: str,
         features_data = np.concatenate(features_data, axis=1)
     else:
         features_data = None
+
+    if molecule_weights_path is not None:
+        molecule_weights = load_features(molecule_weights_path)
+    else:
+        molecule_weights = None
         
     if phase_features_path is not None:
         phase_features = load_features(phase_features_path)
@@ -328,6 +334,7 @@ def get_data(path: str,
                 data_weight=all_weights[i] if data_weights is not None else 1.,
                 features_generator=features_generator,
                 features=all_features[i] if features_data is not None else None,
+                molecule_weights=molecule_weights[i] if molecule_weights is not None else None,
                 phase_features=all_phase_features[i] if phase_features is not None else None,
                 atom_features=atom_features[i] if atom_features is not None else None,
                 atom_descriptors=atom_descriptors[i] if atom_descriptors is not None else None,

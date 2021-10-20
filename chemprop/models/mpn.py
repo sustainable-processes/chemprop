@@ -187,6 +187,7 @@ class MPN(nn.Module):
     def forward(self,
                 batch: Union[List[List[str]], List[List[Chem.Mol]], List[List[Tuple[Chem.Mol, Chem.Mol]]], List[BatchMolGraph]],
                 features_batch: List[np.ndarray] = None,
+                molecule_weights_batch: List[np.ndarray] = None,
                 atom_descriptors_batch: List[np.ndarray] = None,
                 atom_features_batch: List[np.ndarray] = None,
                 bond_features_batch: List[np.ndarray] = None) -> torch.FloatTensor:
@@ -255,7 +256,11 @@ class MPN(nn.Module):
         else:
             encodings = [enc(ba) for enc, ba in zip(self.encoder, batch)]
 
-        output = reduce(lambda x, y: torch.cat((x, y), dim=1), encodings)
+        if molecule_weights_batch is not None and len(encodings) > 1:
+            molecule_weights_batch = torch.tensor(molecule_weights_batch).float().to(self.device)
+            output = torch.sum(molecule_weights_batch * encodings, dim=1)
+        else:
+            output = reduce(lambda x, y: torch.cat((x, y), dim=1), encodings)
 
         if self.use_input_features:
             if len(features_batch.shape) == 1:
@@ -264,3 +269,12 @@ class MPN(nn.Module):
             output = torch.cat([output, features_batch], dim=1)
 
         return output
+
+
+def weight_encodings(weights: torch.tensor, encodings: List[torch.tensor]):
+    return torch.sum(
+        torch.tensor(
+            [weight * encoding for weight, encoding in zip(weights, encodings)]
+        ),
+        dim=1,
+    )

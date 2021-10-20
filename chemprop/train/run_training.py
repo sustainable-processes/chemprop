@@ -249,6 +249,7 @@ def run_training(args: TrainArgs,
         best_epoch, n_iter = 0, 0
         for epoch in trange(args.epochs):
             debug(f'Epoch {epoch}')
+            writer.add_scalar("Epoch", epoch)
             n_iter = train(
                 model=model,
                 data_loader=train_data_loader,

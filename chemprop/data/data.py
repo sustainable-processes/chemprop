@@ -61,6 +61,7 @@ class MoleculeDatapoint:
                  data_weight: float = 1,
                  features: np.ndarray = None,
                  features_generator: List[str] = None,
+                 molecule_weights: np.ndarray = None,
                  phase_features: List[float] = None,
                  atom_features: np.ndarray = None,
                  atom_descriptors: np.ndarray = None,
@@ -88,6 +89,7 @@ class MoleculeDatapoint:
         self.targets = targets
         self.row = row
         self.data_weight = data_weight
+        self.molecule_weights = molecule_weights
         self.features = features
         self.features_generator = features_generator
         self.phase_features = phase_features
@@ -321,6 +323,12 @@ class MoleculeDataset(Dataset):
             return None
 
         return [d.features for d in self._data]
+
+    def molecule_weights(self) -> List[np.ndarray]:
+        if len(self._data) == 0 or self._data[0].molecule_weights is None:
+            return None
+        
+        return [d.molecule_weights for d in self._data]
 
     def phase_features(self) -> List[np.ndarray]:
         """
