@@ -32,6 +32,7 @@ def cross_validate(args: TrainArgs,
     :param train_func: Function which runs training.
     :return: A tuple containing the mean and standard deviation performance across folds.
     """
+
     logger = create_logger(name=TRAIN_LOGGER_NAME, save_dir=args.save_dir, quiet=args.quiet)
     if logger is not None:
         debug, info = logger.debug, logger.info
