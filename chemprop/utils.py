@@ -24,6 +24,15 @@ from chemprop.data import StandardScaler, MoleculeDataset, preprocess_smiles_col
 from chemprop.models import MoleculeModel
 from chemprop.nn_utils import NoamLR
 from chemprop.spectra_utils import sid_loss, sid_metric, wasserstein_loss, wasserstein_metric
+import psutil
+from psutil._common import bytes2human
+
+
+
+def get_mem():
+    """Return available memory in GB"""
+    mem_usage = psutil.virtual_memory()
+    return f"{bytes2human(mem_usage[1])}"
 
 
 def makedirs(path: str, isfile: bool = False) -> None:

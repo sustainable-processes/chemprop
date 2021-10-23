@@ -20,7 +20,7 @@ from chemprop.data import get_class_sizes, get_data, MoleculeDataLoader, Molecul
 from chemprop.models import MoleculeModel
 from chemprop.nn_utils import param_count, param_count_all
 from chemprop.utils import build_optimizer, build_lr_scheduler, get_loss_func, load_checkpoint, makedirs, \
-    save_checkpoint, save_smiles_splits, load_frzn_model
+    save_checkpoint, save_smiles_splits, load_frzn_model, get_mem
 
 
 def run_training(args: TrainArgs,
@@ -91,6 +91,9 @@ def run_training(args: TrainArgs,
                                                      num_folds=args.num_folds,
                                                      args=args,
                                                      logger=logger)
+
+    ### LITTLE HACK TO REDUCE MEMORY
+    del args._crossval_index_sets
 
     if args.dataset_type == 'classification':
         class_sizes = get_class_sizes(data)
@@ -247,9 +250,9 @@ def run_training(args: TrainArgs,
         # Run training
         best_score = float('inf') if args.minimize_score else -float('inf')
         best_epoch, n_iter = 0, 0
+        debug(f"Available memory before training starts: {get_mem()}")
         for epoch in trange(args.epochs):
             debug(f'Epoch {epoch}')
-            writer.add_scalar("Epoch", epoch)
             n_iter = train(
                 model=model,
                 data_loader=train_data_loader,
@@ -272,7 +275,8 @@ def run_training(args: TrainArgs,
                 scaler=scaler,
                 logger=logger
             )
-
+            # ADDED EPOCH LOGGER
+            writer.add_scalar("Epoch", epoch, n_iter)
             for metric, scores in val_scores.items():
                 # Average validation score
                 avg_val_score = np.nanmean(scores)
