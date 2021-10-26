@@ -102,7 +102,7 @@ def train(model: MoleculeModel,
             loss_sum = iter_count = 0
 
             lrs_str = ', '.join(f'lr_{i} = {lr:.4e}' for i, lr in enumerate(lrs))
-            debug(f'Loss = {loss_avg:.4e}, PNorm = {pnorm:.4f}, GNorm = {gnorm:.4f}, {lrs_str}')
+            # debug(f'Loss = {loss_avg:.4e}, PNorm = {pnorm:.4f}, GNorm = {gnorm:.4f}, {lrs_str}')
 
             if writer is not None:
                 writer.add_scalar("available_memory", get_mem(), n_iter)
