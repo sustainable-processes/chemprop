@@ -6,6 +6,7 @@ from typing import List
 import numpy as np
 import pandas as pd
 from rdkit.Chem import PandasTools
+from tqdm import tqdm
 
 
 def save_features(path: str, features: List[np.ndarray]) -> None:
@@ -18,7 +19,7 @@ def save_features(path: str, features: List[np.ndarray]) -> None:
     np.savez_compressed(path, features=features)
 
 
-def load_features(path: str) -> np.ndarray:
+def load_features(path: str, max_data_size: int) -> np.ndarray:
     """
     Loads features saved in a variety of formats.
 
@@ -47,7 +48,12 @@ def load_features(path: str) -> np.ndarray:
         with open(path) as f:
             reader = csv.reader(f)
             next(reader)  # skip header
-            features = np.array([[float(value) for value in row] for row in reader])
+            features = []
+            for i, row in enumerate(tqdm(reader)):
+                features.append([float(value) for value in row] )
+                if i > max_data_size:
+                    break
+            features = np.array(features)
     elif extension in ['.pkl', '.pckl', '.pickle']:
         with open(path, 'rb') as f:
             features = np.array([np.squeeze(np.array(feat.todense())) for feat in pickle.load(f)])

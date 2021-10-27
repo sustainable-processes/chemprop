@@ -330,6 +330,10 @@ class TrainArgs(CommonArgs):
     """Path to file with features for separate val set."""
     separate_test_features_path: List[str] = None
     """Path to file with features for separate test set."""
+    separate_val_molecule_weights_path: List[str] = None
+    """Path to file with molecule weights for separate val set."""
+    separate_test_molecule_weights_path: List[str] = None
+    """Path to test with molecule weights for separate val set."""
     separate_val_phase_features_path: str = None
     """Path to file with phase features for separate val set."""
     separate_test_phase_features_path: str = None

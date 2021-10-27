@@ -227,7 +227,7 @@ def get_data(path: str,
         bond_features_path = bond_features_path if bond_features_path is not None \
             else args.bond_features_path
         max_data_size = max_data_size if max_data_size is not None else args.max_data_size
-
+        molecule_weights_path = molecule_weights_path if molecule_weights_path is not None else args.molecule_weights_path
     if not isinstance(smiles_columns, list):
         smiles_columns = preprocess_smiles_columns(path=path, smiles_columns=smiles_columns)
 
@@ -237,18 +237,19 @@ def get_data(path: str,
     if features_path is not None:
         features_data = []
         for feat_path in features_path:
-            features_data.append(load_features(feat_path))  # each is num_data x num_features
+            features_data.append(load_features(feat_path, max_data_size))  # each is num_data x num_features
         features_data = np.concatenate(features_data, axis=1)
     else:
         features_data = None
 
+    
     if molecule_weights_path is not None:
-        molecule_weights = load_features(molecule_weights_path)
+        molecule_weights = load_features(molecule_weights_path, max_data_size)
     else:
         molecule_weights = None
         
     if phase_features_path is not None:
-        phase_features = load_features(phase_features_path)
+        phase_features = load_features(phase_features_path, max_data_size)
         for d_phase in phase_features:
             if not (d_phase.sum() == 1 and np.count_nonzero(d_phase) == 1):
                 raise ValueError('Phase features must be one-hot encoded.')
