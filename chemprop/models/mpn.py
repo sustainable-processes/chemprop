@@ -257,7 +257,12 @@ class MPN(nn.Module):
             encodings = [enc(ba) for enc, ba in zip(self.encoder, batch)]
 
         if molecule_weights_batch is not None and len(encodings) > 1:
-            molecule_weights_batch = [b[:, np.newaxis] for b in np.vstack(molecule_weights_batch).T]
+            molecule_weights_batch = [
+                torch.tensor(
+                    mw[:, np.newaxis]
+                ).to(self.device) 
+                for mw in np.vstack(molecule_weights_batch).T
+            ]
             output = weight_encodings(molecule_weights_batch, encodings)
         else:
             output = reduce(lambda x, y: torch.cat((x, y), dim=1), encodings)
@@ -271,10 +276,10 @@ class MPN(nn.Module):
         return output
 
 
-def weight_encodings(weights: List[np.ndarray], encodings: List[torch.tensor]):
+def weight_encodings(weights: List[torch.tensor], encodings: List[torch.tensor]):
     return torch.sum(
         torch.stack(
-            [torch.tensor(weight) * encoding for weight, encoding in zip(weights, encodings)]
+            [weight * encoding for weight, encoding in zip(weights, encodings)]
         ),
         dim=0,
     ).float()
