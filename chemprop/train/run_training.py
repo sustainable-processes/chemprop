@@ -79,7 +79,7 @@ def run_training(
             path=args.separate_val_path,
             args=args,
             features_path=args.separate_val_features_path,
-            molecule_weights_path=args.separate_test_molecule_weights_path,
+            molecule_weights_path=args.separate_val_molecule_weights_path,
             atom_descriptors_path=args.separate_val_atom_descriptors_path,
             bond_features_path=args.separate_val_bond_features_path,
             phase_features_path=args.separate_val_phase_features_path,

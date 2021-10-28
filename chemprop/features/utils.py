@@ -6,7 +6,6 @@ from typing import List
 import numpy as np
 import pandas as pd
 from rdkit.Chem import PandasTools
-from tqdm import tqdm
 
 
 def save_features(path: str, features: List[np.ndarray]) -> None:
@@ -49,7 +48,7 @@ def load_features(path: str, max_data_size: int) -> np.ndarray:
             reader = csv.reader(f)
             next(reader)  # skip header
             features = []
-            for i, row in enumerate(tqdm(reader)):
+            for i, row in enumerate(reader):
                 features.append([float(value) for value in row] )
                 if i > max_data_size:
                     break
