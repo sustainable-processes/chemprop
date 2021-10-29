@@ -65,11 +65,11 @@ class MoleculeModel(nn.Module):
             self.num_classes = args.multiclass_num_classes
         if args.features_only:
             first_linear_dim = args.features_size
-        elif args.molecule_weights_path is None:
+        elif args.molecule_weights_path is None or args.molecule_weights_method == "concatenate":
             first_linear_dim = args.hidden_size * args.number_of_molecules
             if args.use_input_features:
                 first_linear_dim += args.features_size
-        elif args.molecule_weights_path is not None:
+        elif args.molecule_weights_path is not None and args.molecule_weights_method == "sum":
             first_linear_dim = args.hidden_size
             if args.use_input_features:
                 first_linear_dim += args.features_size

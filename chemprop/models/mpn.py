@@ -170,6 +170,7 @@ class MPN(nn.Module):
 
         self.features_only = args.features_only
         self.use_input_features = args.use_input_features
+        self.molecule_weights_method = args.molecule_weights_method
         self.device = args.device
         self.atom_descriptors = args.atom_descriptors
         self.overwrite_default_atom_features = args.overwrite_default_atom_features
@@ -256,7 +257,7 @@ class MPN(nn.Module):
         else:
             encodings = [enc(ba) for enc, ba in zip(self.encoder, batch)]
 
-        if molecule_weights_batch is not None and len(encodings) > 1:
+        if molecule_weights_batch is not None and len(encodings) > 1 and self.molecule_weights_method == "sum":
             molecule_weights_batch = [
                 torch.tensor(
                     mw[:, np.newaxis]
@@ -264,6 +265,15 @@ class MPN(nn.Module):
                 for mw in np.vstack(molecule_weights_batch).T
             ]
             output = weight_encodings(molecule_weights_batch, encodings)
+        elif molecule_weights_batch is not None and len(encodings) > 1 and self.molecule_weights_method == "concatenate":
+            molecule_weights_batch = [
+                torch.tensor(
+                    mw[:, np.newaxis]
+                ).float().to(self.device) 
+                for mw in np.vstack(molecule_weights_batch).T
+            ]   
+            encodings = [weight * encoding for weight, encoding in zip(molecule_weights_batch, encodings)]
+            output = reduce(lambda x, y: torch.cat((x, y), dim=1), encodings)
         else:
             output = reduce(lambda x, y: torch.cat((x, y), dim=1), encodings)
 

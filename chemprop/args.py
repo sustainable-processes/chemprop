@@ -322,6 +322,8 @@ class TrainArgs(CommonArgs):
     """Hidden dim for higher-capacity FFN (defaults to hidden_size)."""
     ffn_num_layers: int = 2
     """Number of layers in FFN after MPN encoding."""
+    molecule_weights_method: Literal["concatenate", "sum"] = "concatenate"
+    """Whether to sum the weighted outputs of the MPN or concetenate them."""
     molecule_weights_path: str = None
     """Path to file with molecule weights. Only relevant if :code:`number_of_molecules > 1"""
     features_only: bool = False
