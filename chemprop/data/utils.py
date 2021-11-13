@@ -280,7 +280,7 @@ def get_data(path: str,
             )
 
         all_smiles, all_targets, all_rows, all_features, all_phase_features, all_weights = [], [], [], [], [], []
-        logger.debug(f"Loading main data from {path}")
+        debug(f"Loading main data from {path}")
         for i, row in enumerate(tqdm(reader)):
             smiles = [row[c] for c in smiles_columns]
 
@@ -328,7 +328,7 @@ def get_data(path: str,
             except Exception as e:
                 raise ValueError(f'Failed to load or validate custom bond features: {e}')
 
-        logger.debug("Creating MoleculeDataset")
+        debug("Creating MoleculeDataset")
         data = MoleculeDataset([
             MoleculeDatapoint(
                 smiles=smiles,
@@ -349,7 +349,7 @@ def get_data(path: str,
         ])
 
     # Filter out invalid SMILES
-    logger.debug("Filtering invalid SMILES")
+    debug("Filtering invalid SMILES")
     if skip_invalid_smiles:
         original_data_len = len(data)
         data = filter_invalid_smiles(data)
