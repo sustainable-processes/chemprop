@@ -386,6 +386,8 @@ class TrainArgs(CommonArgs):
     Number of epochs during which learning rate increases linearly from :code:`init_lr` to :code:`max_lr`.
     Afterwards, learning rate decreases exponentially from :code:`max_lr` to :code:`final_lr`.
     """
+    find_lr: bool = False
+    """Use pytorch-lr-finder to help you find an optimal learning rate through 1 epoch of traiing."""
     init_lr: float = 1e-4
     """Initial learning rate."""
     max_lr: float = 1e-3

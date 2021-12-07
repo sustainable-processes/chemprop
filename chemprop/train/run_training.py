@@ -289,12 +289,13 @@ def run_training(
         optimizer = build_optimizer(model, args)
 
         # Learning rate schedulers
-        scheduler = build_lr_scheduler(optimizer, args)
+        if not args.find_lr:
+            scheduler = build_lr_scheduler(optimizer, args)
 
-        # Run training
+        # Run training  / lr finderss
+        debug(f"Available memory before training starts: {get_mem()}G")
         best_score = float("inf") if args.minimize_score else -float("inf")
         best_epoch, n_iter = 0, 0
-        debug(f"Available memory before training starts: {get_mem()}G")
         for epoch in trange(args.epochs):
             debug(f"Epoch {epoch}")
             n_iter = train(

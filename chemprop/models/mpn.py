@@ -276,7 +276,7 @@ class MPN(nn.Module):
             output = reduce(lambda x, y: torch.cat((x, y), dim=1), encodings)
         else:
             output = reduce(lambda x, y: torch.cat((x, y), dim=1), encodings)
-
+        import pdb; pdb.set_trace()
         if self.use_input_features:
             if len(features_batch.shape) == 1:
                 features_batch = features_batch.view(1, -1)
