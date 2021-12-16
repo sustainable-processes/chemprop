@@ -57,7 +57,7 @@ setup(
         'scipy>=1.4.1',
         'sphinx>=3.1.2',
         'tensorboardX>=2.0',
-        'torch>=1.5.1',
+        'torch>=1.10.1',
         'tqdm>=4.45.0',
         'typed-argument-parser>=1.6.1'
     ],
