@@ -11,7 +11,7 @@ from .data import (
 )
 from .scaffold import generate_scaffold, log_scaffold_stats, scaffold_split, scaffold_to_smiles
 from .scaler import StandardScaler
-from .utils import (
+from chemprop.data.utils import (
     filter_invalid_smiles,
     get_class_sizes,
     get_data,

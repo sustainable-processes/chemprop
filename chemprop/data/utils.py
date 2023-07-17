@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 from .data import MoleculeDatapoint, MoleculeDataset
 from .scaffold import log_scaffold_stats, scaffold_split
-from chemprop.args import PredictArgs, TrainArgs
+# from chemprop.args import PredictArgs, TrainArgs
 from chemprop.features import load_features, load_valid_atom_or_bond_features
 
 
@@ -173,7 +173,7 @@ def get_data(path: str,
              target_columns: List[str] = None,
              ignore_columns: List[str] = None,
              skip_invalid_smiles: bool = True,
-             args: Union[TrainArgs, PredictArgs] = None,
+             args = None,
              data_weights_path: str = None,
              features_path: List[str] = None,
              molecule_weights_path: str = None,
@@ -399,7 +399,7 @@ def split_data(data: MoleculeDataset,
                sizes: Tuple[float, float, float] = (0.8, 0.1, 0.1),
                seed: int = 0,
                num_folds: int = 1,
-               args: TrainArgs = None,
+               args = None,
                logger: Logger = None) -> Tuple[MoleculeDataset,
                                                MoleculeDataset,
                                                MoleculeDataset]:
